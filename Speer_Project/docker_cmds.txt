@@ -1,0 +1,1 @@
+docker run -d --name speer-postgres -e POSTGRES_DB=speerDB -e POSTGRES_USER=speer -e POSTGRES_PASSWORD=db123 -p 5432:5432 postgres
