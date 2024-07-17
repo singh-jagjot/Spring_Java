@@ -1,7 +1,7 @@
 package com.backend.project.config;
 
 import com.backend.project.enums.Messages;
-import com.backend.project.util.JwtUtil;
+import com.backend.project.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,15 +11,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 
 @Component
 public class TokenFilter extends OncePerRequestFilter {
 
-    private final JwtUtil util;
+    private final JwtService util;
 
     @Autowired
-    TokenFilter(JwtUtil uti){
+    TokenFilter(JwtService uti){
         this.util = uti;
     }
     @Override

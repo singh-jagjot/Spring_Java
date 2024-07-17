@@ -31,29 +31,3 @@ VALUES (1, 'Spring Security',
        (5, 'GraphQL',
         'GraphQL is a query language for your API, and a server-side runtime for executing queries by using a type system you define for your data.');
 
--- Insert dummy data into shared_notes table
--- INSERT INTO shared_notes (user_id, note_id)
--- VALUES (1, 2),  -- User 1 shares Note 2
---        (2, 1),  -- User 2 shares Note 1
---        (3, 1),  -- User 3 shares Note 1
---        (3, 2),  -- User 3 shares Note 2
---        (2, 5),  -- User 2 shares Note 5
---        (4, 6),  -- User 4 shares Note 6
---        (5, 7),  -- User 5 shares Note 7
---        (1, 8),  -- User 1 shares Note 8
---        (2, 9),  -- User 2 shares Note 9
---        (3, 10), -- User 3 shares Note 10
---        (4, 11); -- User 4 shares Note 11
-
--- INSERT INTO shared_notes (user_id, note_id, shared_with)
--- VALUES (1, 2, 2),  -- User 1 shares Note 2
---        (2, 1, 3),  -- User 2 shares Note 1
---        (3, 1, 5),  -- User 3 shares Note 1
---        (3, 2, 1),  -- User 3 shares Note 2
---        (2, 5, 1),  -- User 2 shares Note 5
---        (4, 6, 1),  -- User 4 shares Note 6
---        (5, 7, 2),  -- User 5 shares Note 7
---        (1, 8, 2),  -- User 1 shares Note 8
---        (2, 9, 3),  -- User 2 shares Note 9
---        (3, 10, 4), -- User 3 shares Note 10
---        (4, 11, 2); -- User 4 shares Note 11
