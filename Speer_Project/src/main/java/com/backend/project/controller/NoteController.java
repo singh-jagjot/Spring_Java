@@ -6,6 +6,9 @@ import com.backend.project.enums.Messages;
 import com.backend.project.model.NoteDetails;
 import com.backend.project.model.ShareWith;
 import com.backend.project.service.NotesService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/notes")
+@Tag(name = "Notes", description = "Operations pertaining to notes")
 public class NoteController {
     private static final Logger logger = LoggerFactory.getLogger(NoteController.class);
 
@@ -30,6 +34,7 @@ public class NoteController {
     }
 
     @GetMapping({"","/", "/{id}"})
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") }, summary = "Get all the notes(created and shared) for the user, if 'id' is provided then only the note with that 'id'", description = "Gets notes for the user")
     public ResponseEntity<List<NoteDetails>> getNotes(@RequestHeader Map<String, String> headers, @PathVariable(required = false) Long id) {
         logger.info("Getting notes: {}", Messages.START);
         try {
@@ -63,6 +68,7 @@ public class NoteController {
     }
 
     @PostMapping
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") }, summary = "Creating note with provided title and content for the user'", description = "Create note for the user")
     public ResponseEntity<Long> createNote(@RequestHeader Map<String, String> headers, @RequestBody NoteDetails noteDetails) {
         logger.info("Creating note: {}", Messages.START);
         try {
@@ -78,6 +84,7 @@ public class NoteController {
     }
 
     @PutMapping("/{id}")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") }, summary = "Update note of 'id' with the updated tile and content for the user if user have access ", description = "Update note for the user")
     public ResponseEntity<Long> updateNoteById(@RequestHeader Map<String, String> headers, @PathVariable Long id, @RequestBody NoteDetails noteDetails) {
         logger.info("Updating note with id {}: {}", id, Messages.START);
         try {
@@ -93,6 +100,7 @@ public class NoteController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") }, summary = "Delete note of 'id' for the user if user have access ", description = "Delete note for the user")
     public ResponseEntity<String> deleteNoteById(@RequestHeader Map<String, String> headers, @PathVariable Long id) {
         logger.info("Deleting note with id {}: {}", id, Messages.START);
         try {
@@ -108,6 +116,7 @@ public class NoteController {
     }
 
     @PostMapping("/{id}/share")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") }, summary = "Sharing note of 'id' with another user with username provided in the body. Works only if user have access to that note", description = "Share note with other user")
     public ResponseEntity<String> shareNoteWithUser(@RequestHeader Map<String, String> headers, @PathVariable Long id, @RequestBody ShareWith shareWith) {
         logger.info("Sharing note with id {} to user {}: {}", id, shareWith.username(), Messages.START);
         try {
@@ -123,6 +132,7 @@ public class NoteController {
     }
 
     @GetMapping("/search")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") }, summary = "Searching notes user have access to with the provided keywords.", description = "Search notes for the user")
     public ResponseEntity<List<Note>> searchByKeywords(@RequestHeader Map<String, String> headers, @RequestParam(value = "q") String q) {
         try {
             User user = getUserFromHeaders(headers).orElseThrow(() -> new RuntimeException(Messages.NO_USR_FND.toString()));

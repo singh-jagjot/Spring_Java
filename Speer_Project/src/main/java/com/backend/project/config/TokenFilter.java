@@ -18,21 +18,25 @@ public class TokenFilter extends OncePerRequestFilter {
     private final JwtService util;
 
     @Autowired
-    TokenFilter(JwtService uti){
+    TokenFilter(JwtService uti) {
         this.util = uti;
     }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getRequestURI().startsWith("/api/auth/")) {
+        if (request.getRequestURI().startsWith("/api/auth/")
+                || request.getRequestURI().startsWith("/v3/api-docs")
+                || request.getRequestURI().startsWith("/swagger-ui")
+        ) {
             filterChain.doFilter(request, response);
         } else {
             final String authHeader = request.getHeader("Authorization");
             String jwt = null;
-            if(authHeader != null && authHeader.startsWith("Bearer ")){
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 jwt = authHeader.split(" ")[1];
             }
             String tokenStatus = util.verifyJwts(jwt);
-            if(tokenStatus.equals(Messages.TKN_VALD.toString())){
+            if (tokenStatus.equals(Messages.TKN_VALD.toString())) {
                 filterChain.doFilter(request, response);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

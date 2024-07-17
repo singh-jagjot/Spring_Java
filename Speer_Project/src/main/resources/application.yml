@@ -28,3 +28,9 @@ spring:
 project:
   secret: qfG5QWBiPIQMFi1vBACK5ljqa5hJVWV1lXqfeV2cnJBSHjMkngNC/maSTQOUGhxm
   secs-to-expire: 86400
+  disable-rate-limiting: false
+
+springdoc:
+  show-actuator: false
+  paths-to-match: /api/auth/**, /api/notes/**
+#  packages-to-scan: com.backend.project.controller
