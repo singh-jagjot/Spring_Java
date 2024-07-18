@@ -45,7 +45,7 @@ public class ThrottlingFilter implements Filter {
             return;
         }
         HttpSession session = httpRequest.getSession(true);
-        System.out.println("Inside Bucket");
+//        System.out.println("Inside Bucket");
         String appKey = "Speer";//SecurityUtils.getThirdPartyAppKey();
         Bucket bucket = (Bucket) session.getAttribute("throttler-" + appKey);
         if (bucket == null) {

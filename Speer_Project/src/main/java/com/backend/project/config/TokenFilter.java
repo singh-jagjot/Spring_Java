@@ -27,7 +27,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        logger.debug("Someone hit '{}'", request.getRequestURL());
+        logger.info("Someone hit '{}'", request.getRequestURL());
         if (request.getRequestURI().startsWith("/api/auth/")
                 || request.getRequestURI().startsWith("/actuator")
                 || request.getRequestURI().startsWith("/v3/api-docs")
