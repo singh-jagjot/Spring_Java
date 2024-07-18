@@ -1,0 +1,131 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+out/
+
+# NetBeans files
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+# NetBeans auto-generated files
+**/build/
+**/nbbuild/
+**/dist/
+**/nbdist/
+
+# VS Code files
+.vscode/
+.history/
+
+# Eclipse files
+.metadata/
+*.classpath
+*.project
+.settings/
+bin/
+
+# Gradle files
+.gradle/
+build/
+
+# Maven files
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.swp
+*~
+
+# Environment variable files
+.env
+
+# Git files
+.git/
+.gitignore
+
+# Exclude IDE/editor configuration files
+*.idea/
+*.sublime-project
+*.sublime-workspace
+*.iml
+*.iws
+*.ipr
+
+# Exclude build artifacts and dependency directories
+**/target/
+**/out/
+**/build/
+**/.gradle/
+**/.idea/
+**/.vscode/
+
+# Ignore Mac-specific metadata files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Ignore logs and databases
+logs/
+*.log
+*.sql
+*.sqlite
+
+# Ignore OS-generated files
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
