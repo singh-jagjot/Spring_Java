@@ -26,17 +26,23 @@ public class ThrottlingFilter implements Filter {
 
     private Bucket createNewBucket() {
         return Bucket.builder()
-                .addLimit(limit -> limit.capacity(config.getBucketCapacity()).refillGreedy(config.getRefillRate(), Duration.ofSeconds(config.getRefillPeriod())))
+                .addLimit(limit -> limit.capacity(config.getBucketCapacity())
+                        .refillGreedy(config.getRefillRate(), Duration.ofSeconds(config.getRefillPeriod()))
+                )
                 .build();
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        if (config.getDisableRateLimiting()) {
+
+        HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+        if (config.getDisableRateLimiting()
+                || httpRequest.getRequestURI().startsWith("/v3/api-docs")
+                || httpRequest.getRequestURI().startsWith("/swagger-ui")
+        ) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpSession session = httpRequest.getSession(true);
         System.out.println("Inside Bucket");
         String appKey = "Speer";//SecurityUtils.getThirdPartyAppKey();

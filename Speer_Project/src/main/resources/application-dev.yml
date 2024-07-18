@@ -24,7 +24,7 @@ project:
   secret: qfG5QWBiPIQMFi1vBACK5ljqa5hJVWV1lXqfeV2cnJBSHjMkngNC/maSTQOUGhxm
   disable-rate-limiting: false
   expiry-duration-secs: 86400
-  bucket-capacity: 3
+  bucket-capacity: 5
   refill-rate: 1
   refill-period: 5
 
