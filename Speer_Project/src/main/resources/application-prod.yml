@@ -1,3 +1,4 @@
+
 spring:
   datasource:
     url: ${DATASOURCE_URL}
@@ -22,3 +23,6 @@ project:
 springdoc:
   show-actuator: false
   paths-to-match: /api/auth/**, /api/notes/**
+server:
+  address: ${SERVER_ADDRESS}
+  port: ${SERVER_PORT}
