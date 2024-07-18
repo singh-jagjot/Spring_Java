@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/speerDB
+    username: speer
+    password: db123
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+    open-in-view:
+  #        format_sql: true
+  #    show-sql: true
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/schema.sql
+#      data-locations: classpath:sql/data.sql
+#    defer-datasource-initialization: true
+#    generate-ddl: true
+
+project:
+  #  Dummy Secret
+  secret: qfG5QWBiPIQMFi1vBACK5ljqa5hJVWV1lXqfeV2cnJBSHjMkngNC/maSTQOUGhxm
+  disable-rate-limiting: false
+  expiry-duration-secs: 86400
+  bucket-capacity: 2
+  refill-rate: 1
+  refill-period: 5
+
+springdoc:
+  show-actuator: false
+  paths-to-match: /api/auth/**, /api/notes/**
