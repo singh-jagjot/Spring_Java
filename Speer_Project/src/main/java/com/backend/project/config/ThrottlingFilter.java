@@ -37,6 +37,7 @@ public class ThrottlingFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         if (config.getDisableRateLimiting()
+                || httpRequest.getRequestURI().startsWith("/actuator")
                 || httpRequest.getRequestURI().startsWith("/v3/api-docs")
                 || httpRequest.getRequestURI().startsWith("/swagger-ui")
         ) {

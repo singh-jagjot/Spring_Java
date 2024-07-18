@@ -29,6 +29,7 @@ public class TokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         logger.debug("Someone hit '{}'", request.getRequestURL());
         if (request.getRequestURI().startsWith("/api/auth/")
+                || request.getRequestURI().startsWith("/actuator")
                 || request.getRequestURI().startsWith("/v3/api-docs")
                 || request.getRequestURI().startsWith("/swagger-ui")
         ) {
