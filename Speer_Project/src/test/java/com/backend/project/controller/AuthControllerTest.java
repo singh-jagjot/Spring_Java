@@ -1,14 +1,12 @@
 package com.backend.project.controller;
 
 import com.backend.project.config.ProjectConfig;
-import com.backend.project.config.ThrottlingFilter;
 import com.backend.project.enums.Messages;
 import com.backend.project.exception.AccessDeniedException;
 import com.backend.project.model.SendToken;
 import com.backend.project.model.UserAuthDetails;
 import com.backend.project.service.AuthService;
 import com.backend.project.service.JwtService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,15 +21,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AuthController.class)
-@Import({ProjectConfig.class})
 @ActiveProfiles("test")
+@Import({ProjectConfig.class})
+@WebMvcTest(AuthController.class)
 public class AuthControllerTest {
     @Autowired
     private MockMvc mvc;
@@ -50,7 +47,7 @@ public class AuthControllerTest {
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-//        when(jwtService.verifyJwts(any())).thenReturn(Messages.TKN_VALD.toString());
+        when(jwtService.verifyJwts(any())).thenReturn(Messages.TKN_VALD.toString());
     }
 
     @Test
@@ -63,7 +60,6 @@ public class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andExpect(content().string(Messages.SUCCESS.toString()));
-        ;
     }
 
     @Test
@@ -76,7 +72,6 @@ public class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Test"));
-        ;
     }
 
     @Test

@@ -3,6 +3,9 @@ package com.backend.project.controller;
 import com.backend.project.entity.Note;
 import com.backend.project.entity.User;
 import com.backend.project.enums.Messages;
+import com.backend.project.exception.AccessDeniedException;
+import com.backend.project.exception.NoteNotFoundException;
+import com.backend.project.exception.UserNotFoundException;
 import com.backend.project.model.NoteDetails;
 import com.backend.project.model.ShareWith;
 import com.backend.project.service.NotesService;
@@ -38,7 +41,7 @@ public class NoteController {
     public ResponseEntity<List<NoteDetails>> getNotes(@RequestHeader Map<String, String> headers, @PathVariable(required = false) Long id) {
         logger.info("Getting notes: {}", Messages.START);
         try {
-            User user = getUserFromHeaders(headers).orElseThrow(() -> new RuntimeException(Messages.NO_USR_FND.toString()));
+            User user = getUserFromHeaders(headers);
 
             if (id != null) {
                 Note note = notesService.getNoteByUserAndId(user, id);
@@ -72,7 +75,7 @@ public class NoteController {
     public ResponseEntity<Long> createNote(@RequestHeader Map<String, String> headers, @RequestBody NoteDetails noteDetails) {
         logger.info("Creating note: {}", Messages.START);
         try {
-            User user = getUserFromHeaders(headers).orElseThrow(() -> new RuntimeException(Messages.NO_USR_FND.toString()));
+            User user = getUserFromHeaders(headers);
             Long noteId = notesService.saveNoteByUser(user, noteDetails);
             return new ResponseEntity<>(noteId, HttpStatus.OK);
         } catch (Exception e) {
@@ -88,11 +91,12 @@ public class NoteController {
     public ResponseEntity<Long> updateNoteById(@RequestHeader Map<String, String> headers, @PathVariable Long id, @RequestBody NoteDetails noteDetails) {
         logger.info("Updating note with id {}: {}", id, Messages.START);
         try {
-            User user = getUserFromHeaders(headers).orElseThrow(() -> new RuntimeException(Messages.NO_USR_FND.toString()));
+            User user = getUserFromHeaders(headers);
             Long noteId = notesService.updateNoteByUserAndId(user, id, noteDetails);
             return new ResponseEntity<>(noteId, HttpStatus.OK);
+        } catch (NoteNotFoundException e){
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            logger.error("Error while updating note with id {}: {}", id, e.getMessage());
             return ResponseEntity.internalServerError().build();
         } finally {
             logger.info("Updating note with id {}: {}", id, Messages.END);
@@ -104,11 +108,12 @@ public class NoteController {
     public ResponseEntity<String> deleteNoteById(@RequestHeader Map<String, String> headers, @PathVariable Long id) {
         logger.info("Deleting note with id {}: {}", id, Messages.START);
         try {
-            User user = getUserFromHeaders(headers).orElseThrow(() -> new RuntimeException(Messages.NO_USR_FND.toString()));
+            User user = getUserFromHeaders(headers);
             String message = notesService.deleteNoteByUserAndId(user, id);
             return ResponseEntity.ok(message);
+        } catch (AccessDeniedException e) {
+            return new ResponseEntity<>(Messages.FAILED + ": " + e.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
-            logger.error("Error while deleting note with id {}: {}", id, e.getMessage());
             return new ResponseEntity<>(Messages.FAILED + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.info("Deleting note with id {}: {}", id, Messages.END);
@@ -120,11 +125,12 @@ public class NoteController {
     public ResponseEntity<String> shareNoteWithUser(@RequestHeader Map<String, String> headers, @PathVariable Long id, @RequestBody ShareWith shareWith) {
         logger.info("Sharing note with id {} to user {}: {}", id, shareWith.username(), Messages.START);
         try {
-            User user = getUserFromHeaders(headers).orElseThrow(() -> new RuntimeException(Messages.NO_USR_FND.toString()));
+            User user = getUserFromHeaders(headers);
             String message = notesService.shareNoteWithUser(user, shareWith.username(), id);
             return ResponseEntity.ok(message);
+        } catch (UserNotFoundException | AccessDeniedException e){
+            return new ResponseEntity<>(Messages.FAILED + ": " + e.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
-            logger.error("Error while sharing note with id {} to user {}: {}", id, shareWith.username(), e.getMessage());
             return new ResponseEntity<>(Messages.FAILED + ": " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             logger.info("Sharing note with id {} to user {}: {}", id, shareWith.username(), Messages.END);
@@ -135,7 +141,7 @@ public class NoteController {
     @Operation(security = { @SecurityRequirement(name = "bearer-key") }, summary = "Searching notes user have access to with the provided keywords.", description = "Search notes for the user")
     public ResponseEntity<List<Note>> searchByKeywords(@RequestHeader Map<String, String> headers, @RequestParam(value = "q") String q) {
         try {
-            User user = getUserFromHeaders(headers).orElseThrow(() -> new RuntimeException(Messages.NO_USR_FND.toString()));
+            User user = getUserFromHeaders(headers);
             List<Note> notes = notesService.searchNotesByKeywords(user, q);
             return ResponseEntity.ok(notes);
         } catch (Exception e) {
@@ -143,7 +149,7 @@ public class NoteController {
         }
     }
 
-    private Optional<User> getUserFromHeaders(Map<String, String> headers) {
-        return notesService.getUserFromJwts(headers.get("authorization").split(" ")[1]);
+    private User getUserFromHeaders(Map<String, String> headers) {
+        return notesService.getUserFromJwts(headers.get("authorization").split(" ")[1]).orElseThrow();
     }
 }
