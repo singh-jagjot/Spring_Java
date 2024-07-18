@@ -2,12 +2,13 @@ package com.backend.project.service;
 
 import com.backend.project.entity.User;
 import com.backend.project.enums.Messages;
+import com.backend.project.exception.AccessDeniedException;
+import com.backend.project.exception.UserNotFoundException;
 import com.backend.project.model.UserAuthDetails;
 import com.backend.project.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,33 +36,36 @@ public class AuthService {
             logger.info("Saving new user '{}': {}", user.username(), Messages.START);
             userRepo.save(new User(user.username(), encoder.encode(user.password())));
             return Messages.SUCCESS.toString();
-        } catch (DataIntegrityViolationException e) {
-            logger.info("Saving new user '{}': {}", user.username(), Messages.FAILED);
-            return Messages.USR_EXIST.toString();
+//        } catch (DataIntegrityViolationException e) {
+//            logger.error("Error while saving new user '{}': {}", user.username(), e.getMessage());
+//            throw e;
         } catch (Exception e) {
-            logger.info("Saving new user '{}': {}", user.username(), Messages.FAILED);
-            return Messages.SERVER_ERR + e.getMessage();
+            logger.error("Error while saving new user '{}': {}", user.username(), e.getMessage());
+            throw e;
         } finally {
             logger.info("Saving new user '{}': {}", user.username(), Messages.END);
         }
     }
 
     public String login(UserAuthDetails potentialUser) {
-        logger.info("Logging in {}: {}", potentialUser.username(), Messages.START);
+        logger.info("Logging in user '{}': {}", potentialUser.username(), Messages.START);
         try {
             Optional<User> user = userRepo.findByUsername(potentialUser.username());
-            if (user.isEmpty() || !encoder.matches(potentialUser.password(), user.get().getPasswordHash())) {
+            if (user.isEmpty()) {
                 logger.info("Logging in {}: {}", potentialUser.username(), Messages.FAILED);
-                return Messages.INVLD_CRED.toString();
+                throw new UserNotFoundException(Messages.NO_USR_FND.toString());
+            } else if (!encoder.matches(potentialUser.password(), user.get().getPasswordHash())){
+                logger.info("Logging in {}: {}", potentialUser.username(), Messages.FAILED);
+                throw new AccessDeniedException(Messages.INVLD_CRED.toString());
             } else {
                 logger.info("Sending JWT to {}", user.get().getUsername());
                 return util.createJwts(user.get().getUsername());
             }
-
         } catch (Exception e) {
-            return Messages.SERVER_ERR + e.getMessage();
+            logger.info("Error while logging in user '{}': {}", potentialUser.username(), e.getMessage());
+            throw e;
         } finally {
-            logger.info("Logging in {}: {}", potentialUser.username(), Messages.END);
+            logger.info("Logging in user '{}': {}", potentialUser.username(), Messages.END);
         }
     }
 
