@@ -7,30 +7,32 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-@Component
+@Configuration
 public class ThrottlingFilter implements Filter {
 
-    private ProjectConfig config;
+    private final ProjectConfig config;
 
     @Autowired
-    ThrottlingFilter(ProjectConfig config){
+    ThrottlingFilter(ProjectConfig config) {
         this.config = config;
     }
 
     private Bucket createNewBucket() {
         return Bucket.builder()
-                .addLimit(limit -> limit.capacity(3).refillGreedy(1, Duration.ofSeconds(2)))
+                .addLimit(limit -> limit.capacity(config.getBucketCapacity()).refillGreedy(config.getRefillRate(), Duration.ofSeconds(config.getRefillPeriod())))
                 .build();
     }
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        if(config.getDisableRateLimiting()){
+        if (config.getDisableRateLimiting()) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }

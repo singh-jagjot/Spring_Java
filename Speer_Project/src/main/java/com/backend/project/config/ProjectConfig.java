@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "project")
 public class ProjectConfig {
     private String secret;
-    private Long secsToExpire;
+    private Long expiryDurationSecs;
     private Boolean disableRateLimiting;
+    private Long bucketCapacity;
+    private Long refillRate;
+    private Long refillPeriod;
 }

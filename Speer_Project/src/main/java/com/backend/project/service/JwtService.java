@@ -29,7 +29,7 @@ public class JwtService {
     public String createJwts(String subject){
         logger.info("Creating JWT for subject '{}': {}", subject, Messages.START);
         Date currDate = new Date();
-        Date expDate = Date.from(currDate.toInstant().plusSeconds(config.getSecsToExpire()));
+        Date expDate = Date.from(currDate.toInstant().plusSeconds(config.getExpiryDurationSecs()));
 //        SecretKey key = Jwts.SIG.HS384.key().build();
 //        String secretString = Encoders.BASE64.encode(key.getEncoded());
 

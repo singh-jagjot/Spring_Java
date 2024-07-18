@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/schema.sql
+
+project:
+  secret: ${PROJECT_SECRET}
+  disable-rate-limiting: ${DISABLE_RATE_LIMITING}
+  expiry-duration-secs: ${EXPIRY_DURATION_SECS}
+  bucket-capacity: ${BUCKET_CAPACITY}
+  refill-rate: ${REFILL_RATE}
+  refill-period: ${REFILL_PERIOD}
+
+springdoc:
+  show-actuator: false
+  paths-to-match: /api/auth/**, /api/notes/**
