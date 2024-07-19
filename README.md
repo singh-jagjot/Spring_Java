@@ -40,15 +40,18 @@ Bucket4j is used for implementing rate limiting to control the rate of requests 
    ```sh
    cd Spring_Java/Speer_Project
 3. **Install JDK 21 and Maven** (if not already installed).
-4. **Build the project**:
+4. **Run test cases**:
+   ```sh
+   mvn clean test
+5. **Build the project**:
    ```sh
    mvn clean package
-5. **Edit properties (optional)**:
+6. **Edit properties (optional)**:
    Before running the application, you can edit the properties in `src/main/resources/application-dev.yml` to suit your needs.
-6. **Run the application**:
+7. **Run the application**:
    ```sh
    java -jar target/project-0.0.1-SNAPSHOT.jar
-7. **Access Swagger UI**:
+8. **Access Swagger UI**:
    Open your browser and navigate to `http://localhost:8080/swagger-ui/index.html` to use Swagger UI. Alternatively, you can use Postman to send requests to `http://localhost:8080`.
 
 ## Usage
