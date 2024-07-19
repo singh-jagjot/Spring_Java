@@ -32,7 +32,7 @@ RUN apk add --no-cache openjdk21-jdk
 WORKDIR /app
 
 # Copy the start script to the working directory
-COPY target/project-0.0.1-SNAPSHOT.jar /app/project-0.0.1-SNAPSHOT.jar
+COPY project-0.0.1-SNAPSHOT.jar /app/project-0.0.1-SNAPSHOT.jar
 
 # Expose port 8080, 5432
 EXPOSE 8080

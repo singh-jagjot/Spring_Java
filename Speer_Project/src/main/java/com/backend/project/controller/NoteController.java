@@ -7,6 +7,7 @@ import com.backend.project.exception.AccessDeniedException;
 import com.backend.project.exception.NoteNotFoundException;
 import com.backend.project.exception.UserNotFoundException;
 import com.backend.project.model.NoteDetails;
+import com.backend.project.model.NoteTitleContent;
 import com.backend.project.model.ShareWith;
 import com.backend.project.service.NotesService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -72,11 +73,11 @@ public class NoteController {
 
     @PostMapping
     @Operation(security = { @SecurityRequirement(name = "bearer-key") }, summary = "Creating note with provided title and content for the user'", description = "Create note for the user")
-    public ResponseEntity<Long> createNote(@RequestHeader Map<String, String> headers, @RequestBody NoteDetails noteDetails) {
+    public ResponseEntity<Long> createNote(@RequestHeader Map<String, String> headers, @RequestBody NoteTitleContent noteTitleContent) {
         logger.info("Creating note: {}", Messages.START);
         try {
             User user = getUserFromHeaders(headers);
-            Long noteId = notesService.saveNoteByUser(user, noteDetails);
+            Long noteId = notesService.saveNoteByUser(user, noteTitleContent);
             return new ResponseEntity<>(noteId, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error while creating note: {}", e.getMessage());

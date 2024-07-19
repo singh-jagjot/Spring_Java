@@ -8,6 +8,7 @@ import com.backend.project.exception.AccessDeniedException;
 import com.backend.project.exception.NoteNotFoundException;
 import com.backend.project.exception.UserNotFoundException;
 import com.backend.project.model.NoteDetails;
+import com.backend.project.model.NoteTitleContent;
 import com.backend.project.repository.NoteRepository;
 import com.backend.project.repository.SharedNoteRepository;
 import com.backend.project.repository.UserRepository;
@@ -115,7 +116,7 @@ public class NotesService {
         }
     }
 
-    public Long saveNoteByUser(User user, NoteDetails noteDetails) {
+    public Long saveNoteByUser(User user, NoteTitleContent noteDetails) {
         logger.info("Saving note for user '{}': {}", user.getUsername(), Messages.START);
         try {
             Note note = new Note(user, noteDetails.title(), noteDetails.content());

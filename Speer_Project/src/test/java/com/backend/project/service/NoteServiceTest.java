@@ -8,6 +8,7 @@ import com.backend.project.exception.AccessDeniedException;
 import com.backend.project.exception.NoteNotFoundException;
 import com.backend.project.exception.UserNotFoundException;
 import com.backend.project.model.NoteDetails;
+import com.backend.project.model.NoteTitleContent;
 import com.backend.project.repository.NoteRepository;
 import com.backend.project.repository.SharedNoteRepository;
 import com.backend.project.repository.UserRepository;
@@ -48,6 +49,7 @@ class NotesServiceTest {
     private User user;
     private Note note;
     private NoteDetails noteDetails;
+    private NoteTitleContent noteTitleContent;
     private SharedNote sharedNote;
 
     @BeforeEach
@@ -59,7 +61,8 @@ class NotesServiceTest {
         note.setContent("Test Content");
         note.setUser(user);
 
-        noteDetails = new NoteDetails(null,"Test Title", "Test Content");
+        noteDetails = new NoteDetails(null, "Test Title", "Test Content");
+        noteTitleContent = new NoteTitleContent("Test Title", "Test Content");
 
         sharedNote = new SharedNote();
         sharedNote.setNote(note);
@@ -172,7 +175,7 @@ class NotesServiceTest {
     void saveNoteByUser() {
         when(noteRepo.save(any(Note.class))).thenReturn(note);
 
-        Long result = notesService.saveNoteByUser(user, noteDetails);
+        Long result = notesService.saveNoteByUser(user, noteTitleContent);
 
         assertNotNull(result);
         assertEquals(note.getId(), result);

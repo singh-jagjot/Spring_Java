@@ -7,6 +7,7 @@ import com.backend.project.enums.Messages;
 import com.backend.project.exception.AccessDeniedException;
 import com.backend.project.exception.NoteNotFoundException;
 import com.backend.project.model.NoteDetails;
+import com.backend.project.model.NoteTitleContent;
 import com.backend.project.model.ShareWith;
 import com.backend.project.service.JwtService;
 import com.backend.project.service.NotesService;
@@ -103,7 +104,7 @@ public class NoteControllerTest {
         NoteDetails noteDetails = new NoteDetails(null, "Test Title", "Test Content");
 
         when(notesService.getUserFromJwts(any())).thenReturn(Optional.of(user));
-        when(notesService.saveNoteByUser(any(User.class), any(NoteDetails.class))).thenReturn(1L);
+        when(notesService.saveNoteByUser(any(User.class), any(NoteTitleContent.class))).thenReturn(1L);
 
         mvc.perform(post("/api/notes")
                         .header("authorization", "Bearer dummy")

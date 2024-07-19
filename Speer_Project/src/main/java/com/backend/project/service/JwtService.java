@@ -61,7 +61,7 @@ public class JwtService {
         } catch (ExpiredJwtException e){
             logger.error("JWT expired: {}", e.getMessage());
             return Messages.TKN_EXPIRED.toString();
-        } catch (JwtException e) {
+        } catch (JwtException | IllegalArgumentException e) {
             logger.error("JWT verification failed: {}", e.getMessage());
             return Messages.TKN_INVALD + " :" + e.getMessage();
         } finally {
