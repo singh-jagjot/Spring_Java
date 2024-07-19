@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,7 +31,7 @@ class AuthServiceTest {
     private PasswordEncoder encoder;
 
     @Mock
-    private JwtService util;
+    private JwtService jwtService;
 
     @InjectMocks
     private AuthService authService;
@@ -74,7 +73,7 @@ class AuthServiceTest {
     void loginPositive() {
         when(userRepo.findByUsername(anyString())).thenReturn(Optional.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(true);
-        when(util.createJwts(anyString())).thenReturn("jwtToken");
+        when(jwtService.createJwts(anyString())).thenReturn("jwtToken");
 
         String result = authService.login(userAuthDetails);
 
@@ -114,7 +113,7 @@ class AuthServiceTest {
         String msg = "JWT creation error";
         when(userRepo.findByUsername(anyString())).thenReturn(Optional.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(true);
-        when(util.createJwts(anyString())).thenThrow(new RuntimeException(msg));
+        when(jwtService.createJwts(anyString())).thenThrow(new RuntimeException(msg));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> authService.login(userAuthDetails));
 

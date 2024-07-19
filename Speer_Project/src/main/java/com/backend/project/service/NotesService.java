@@ -26,20 +26,20 @@ public class NotesService {
     private final UserRepository userRepo;
     private final NoteRepository noteRepo;
     private final SharedNoteRepository sharedNoteRepo;
-    private final JwtService util;
+    private final JwtService jwtService;
 
     @Autowired
-    NotesService(UserRepository userRepo, NoteRepository noteRepo, SharedNoteRepository sharedNoteRepo, JwtService util) {
+    NotesService(UserRepository userRepo, NoteRepository noteRepo, SharedNoteRepository sharedNoteRepo, JwtService jwtService) {
         this.userRepo = userRepo;
         this.noteRepo = noteRepo;
         this.sharedNoteRepo = sharedNoteRepo;
-        this.util = util;
+        this.jwtService = jwtService;
     }
 
     public Optional<User> getUserFromJwts(String jwts) {
         logger.info("Retrieving user from JWT: {}", Messages.START);
         try {
-            Optional<User> user = userRepo.findByUsername(util.getSubject(jwts));
+            Optional<User> user = userRepo.findByUsername(jwtService.getSubject(jwts));
             if (user.isEmpty()) {
                 throw new UserNotFoundException(Messages.NO_USR_FND.toString());
             }
